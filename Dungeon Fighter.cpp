@@ -7,26 +7,19 @@
 #include <ctime>
 #include <cmath>
 #include <string>
-#include <iomanip>
-
-
-
 
 //dungeon maximum X value
 static const short int D_X = 40;
-
 //dungeon maximum Y value
 static const short int D_Y = 15;
 
 //dungeon courrent maximum X value
 short int C_X = D_X ;
-
 //dungeon courrent maximum Y value
 short int C_Y = D_Y ;
 
 //If not in a battle
 bool ExploreMode = true;
-
 //if in a battle
 bool BattleMode = false;
 
@@ -39,69 +32,69 @@ void SetColor(unsigned short int color)
 
 //Class of the Player
 class PlayerClass
-{ 
+{
 public:
 	//name of the player
 	std::string Name = "Player";
-	
 	//Position X of player
 	short int X;
-
 	//Position Y of player
 	short int Y;
-
 	//Last position X of player
 	short int LastX;
-
 	//Last position Y of player
-	short int LastY;	
+	short int LastY;
 
 	//if player is Alive
 	bool Alive = true;
-
-	//level of player
-	short int LVL = 1;	
-
 	//Check if player already spawned
 	bool Spawned = false;
 
+	//level of player
+	short int LVL = 1;	
 	//Experience needed to level up when experience = 0
-	short int ExpToLvlUP = 100;
-
+	float ExpToLvlUP = 100;
 	//Experience
-	short int Experience = 0;
+	float Experience = 90;	
 
+	//BaseDamage + WeaponDamage = Damage
+	double BaseDamage = 12.5;
+	//BaseDamage + WeaponDamage = Damage
+	double WeaponDamage = 1;
 	//Damage
-	double Damage;
+	double Damage = BaseDamage + WeaponDamage;
 
+	//BaseDefense + armor = Defense
+	double BaseDefense = 0.5;
+	//BaseDefense + armor = Defense
+	double Armor = 1;	
 	//Defense: Damage - Defense = Damage done 
-	double Defense = 0.5;
-
+	double Defense = BaseDefense + Armor;
+	
+	//BaseHP + ArmorHP = HPMax
+	double BaseHP = 100;
+	//BaseHP + ArmorHP = HPMax
+	double ArmorHP = 10;
 	//maximum Health poshort ints amount
-	double HPMax = 100;
-
-	//Health poshort ints left
+	double HPMax = BaseHP + ArmorHP;
+	//Health point left
 	double HP = HPMax;
-
+		
 	//maximum Food amount
 	double FoodMax = 30;
-
 	//Food left
-	double Food = FoodMax;
+	double Food = FoodMax;	
 
+	//
+	double BaseMana = 20;
+	//
+	double ArmorMana = 2.5;
 	//maximum Mana amount
-	double ManaMax = 20;
-
+	double ManaMax = BaseMana + ArmorMana;
 	//Mana left
 	double Mana = ManaMax;
-
-private:
-	short int Attack(short int LVL, short int Damage, double HP)
-	{
-
-	}
-
-
+	
+	
 }; PlayerClass Player;
 
 
@@ -163,15 +156,15 @@ public:
 				//Stage 1 dungeon map 1
 				char Map[10][10] = {
 				{ 100, 100, 100, 100, 100, 100, 100, 100, 100, 100 },//1st line
-				{ 100,   2,   1, 100,   1,   1,   1,   1,   1, 100 },//2nd line
-				{ 100,   1,   1, 100,   1, 100, 100, 100,   1, 100 },//3rd line
-				{ 100, 100,   1,   1,   1, 100, 100, 100,   1, 100 },//4th line
-				{ 100, 100, 100,   1, 100,   1, 100,   1,   1, 100 },//5th line
-				{ 100,   3, 100,   1,   1,   1, 100,   1,   1, 100 },//6th line
+				{ 100,   2,   1,   1,   1,   1,   1,   1,   1, 100 },//2nd line
+				{ 100,   1,   1, 100, 100, 100, 100, 100,   1, 100 },//3rd line
+				{ 100,   1,   1,   1, 100,   1,   1,   1,   1,   1 },//4th line
+				{ 100, 100, 100,   1, 100,   1, 100,   1,   1,   1 },//5th line
+				{ 100,   3,   1,   1,   1,   1, 100,   1,   1,   1 },//6th line
 				{ 100,   1,   1, 100, 100, 100, 100,   1, 100, 100 },//7th line
 				{ 100, 100,   1, 100, 100,   1,   1,   1,   1, 100 },//8th line
-				{ 100, 100,   1,   1,   1,   1, 100, 100, 100, 100 },//9th line
-				{ 100, 100, 100, 100, 100, 100, 100, 100, 100, 100 }//10th line
+				{ 100, 100,   1,   1,   1,   1, 100, 100,   1, 100 },//9th line
+				{ 100, 100, 100, 100,   1,   1,   1,   1,   1, 100 }//10th line
 				};
 
 			}; Map1 m1;
@@ -185,8 +178,8 @@ public:
 
 				//Stage 1 dungeon map 2
 				char Map[10][10] = {
-					{   1,   1,   1,   1, 100,   1,   1,   1,   1,   1 },//1st line
-					{   3,   1,   1,   1, 100,   1,   1,   1,   1,   1 },//2nd line
+					{   1,   1, 100, 100, 100, 100, 100, 100, 100, 100 },//1st line
+					{   3,   1,   1,   1, 100,   1,   1,   1,   1, 100 },//2nd line
 					{   1,   1, 100,   1,   1,   1, 100, 100,   1,   1 },//3rd line
 					{   1,   1, 100,   1,   1,   1, 100,   1,   1,   1 },//4th line
 					{ 100, 100, 100, 100, 100, 100, 100,   1,   1,   1 },//5th line
@@ -334,120 +327,175 @@ public:
 		static const char KeyCh     = 21;
 
 		
-		std::cout << (char)201;//for the frame
+		std::cout << (char)201; 
 
-		for (short int x = 0; x < C_X; x++)//for the frame
+		for (short int x = 0; x < C_X; x++) 
 		{
 			std::cout << (char)205; }
 
-		std::cout << (char)187 << '\n' ;//for the frame
+		std::cout << (char)187 << '\n' ; 
 
-		std::cout << (char)186 ;//for the frame
+		std::cout << (char)186 ; 
 
 		std::cout << "Stage: " << Stage;
 
 		if (Stage < 10) 
 		{
-			for (short int x = 0; x < C_X - 8; x++)//for the frame
+			for (short int x = 0; x < C_X - 8; x++) 
 			{
-				std::cout << ' ';//for the frame
+				std::cout << ' '; 
 			}
 			std::cout << (char)186 << '\n' ;
 		}
-		if (Stage >= 10)
-		{
-			for (short int x = 0; x < C_X - 9; x++)//for the frame
-			{
-				std::cout << ' ';
-			}
-			std::cout << (char)186 << '\n' ;//for the frame
-		}
-
-		
-		
-		std::cout << (char)204 ;//for the frame
-
-		for (short int x = 0; x < C_X ; x++)//for the frame
-		{
-			std::cout << (char)205; }//for the frame
-		std::cout << (char)185;//for the frame
+		if (Stage >= 10){
+			for (short int x = 0; x < C_X - 9; x++){std::cout << ' '; } 		
+			std::cout << (char)186 << '\n' ; }	
+		std::cout << (char)204 ; 
+		for (short int x = 0; x < C_X ; x++){std::cout << (char)205; }
+		std::cout << (char)185; 
+		SetColor(15);
 		std::cout << "Lvl: " << Player.LVL << '\n';
+		SetColor(15);
 		//for every Row
 		for (short int y = C_Y; y > 0; y--)
 		{
-			std::cout << (char)186;//for the frame
+			std::cout << (char)186; 
 
 			//For every Column
 			for (short int x = 0; x < C_X; x++ )
 			{ 
-
 				//check for player 
 				if ( EntityMap[y - 1][ x ] == 1 )
-				{
-					//Entity Player
+				{	//Entity Player
 					SetColor(3);
 					std::cout << PlayerCh;
-					SetColor(7);
-				}
-				//check for Slime
+					SetColor(15);
+				}//check for Slime
 				else if (EntityMap[y - 1][x] == 2)
-				{
-					//Entity Slime
+				{ //Entity Slime
 					SetColor(10);
 					std::cout << SlimeCh;
-					SetColor(7);
-				}
-				//check for Zombie
+					SetColor(15);
+				}//check for Zombie
 				else if (EntityMap[y - 1][x] == 3)
-				{
-					//Entity Zombie
+				{//Entity Zombie
 					SetColor(2);
 					std::cout << ZombieCh;
-					SetColor(7);
+					SetColor(15);
 				}
 				else if ( Map[ y - 1 ][ x ] == 100 )
-				{
-					//Wall
+				{	//Wall
 					std::cout << WallCh;
 				}
 				else if ( Map[ y - 1 ][ x ] == 3 )
-				{
-					//DungeonGate
+				{	//DungeonGate
 					std::cout << GateCh;
 				}
 				else if ( Map[ y - 1 ][ x ] == 2 )
-				{
-					//SpawnPoshort int
+				{	//SpawnPoshort int
 					std::cout << SpawnCh;
 				}
 				else if ( Map[ y - 1 ][ x ] == 1 )
-				{
-					//Path
+				{	//Path
 					std::cout << PathCh;
 				}
 				else
-				{
-					//default
+				{	//default
 					std::cout << NothingCh;
 				}
 
 			}
-			std::cout << (char)186 ;//for the frame
-			if (y == C_Y) { SetColor(12); std::cout << "HP: " << Player.HP << '/' << Player.HPMax; SetColor(7); }
-			else if(y == C_Y -1){ SetColor(6); std::cout << "Food: " << Player.Food << '/' << Player.FoodMax; SetColor(7); }
-			else if (y == C_Y - 2) { SetColor(3); std::cout << "Mana: " << Player.Mana << '/' << Player.ManaMax; SetColor(7); }
-			else if (y == C_Y - 3) { SetColor(10); std::cout << "exp: " << Player.Experience << '/' << Player.ExpToLvlUP; SetColor(7); }
+			std::cout << (char)186 ; 
+			double HPdiv = Player.HP / Player.HPMax;
+			double Fooddiv = Player.Food / Player.FoodMax;
+			double Manadiv = Player.Mana / Player.ManaMax;
+			double Expdiv = Player.Experience / Player.ExpToLvlUP;
+			int rest = 10;
+			if (y == C_Y) {
+				int HPInt = Player.HP;
+				int HPMaxInt = Player.HPMax;
+				SetColor(12); std::cout << "HP: " << HPInt << '/' << HPMaxInt; SetColor(15);
+				std::cout << '\t' << '['; SetColor(12);
+				if (HPdiv >= 0.1) { std::cout << (char)178; rest--; }
+				if (HPdiv >= 0.2) { std::cout << (char)178; rest--; }
+				if (HPdiv >= 0.3) { std::cout << (char)178; rest--; }
+				if (HPdiv >= 0.4) { std::cout << (char)178; rest--; }
+				if (HPdiv >= 0.5) { std::cout << (char)178; rest--; }
+				if (HPdiv >= 0.6) { std::cout << (char)178; rest--; }
+				if (HPdiv >= 0.7) { std::cout << (char)178; rest--; }
+				if (HPdiv >= 0.8) { std::cout << (char)178; rest--; }
+				if (HPdiv >= 0.9) { std::cout << (char)178; rest--; }
+				if (HPdiv >= 1) { std::cout << (char)178; rest--; }
+				for (; rest > 0; rest--) { std::cout << (char)205; }
+				SetColor(15); std::cout << ']';
+			}
+			else if (y == C_Y - 1) {
+				int FoodInt = Player.Food;
+				int FoodMaxInt = Player.FoodMax;
+				SetColor(6); std::cout << "Food: " << FoodInt << '/' << FoodMaxInt; SetColor(15);
+				std::cout << '\t' << '['; SetColor(6);
+				if (Fooddiv >= 0.1) { std::cout << (char)178; rest--; }
+				if (Fooddiv >= 0.2) { std::cout << (char)178; rest--; }
+				if (Fooddiv >= 0.3) { std::cout << (char)178; rest--; }
+				if (Fooddiv >= 0.4) { std::cout << (char)178; rest--; }
+				if (Fooddiv >= 0.5) { std::cout << (char)178; rest--; }
+				if (Fooddiv >= 0.6) { std::cout << (char)178; rest--; }
+				if (Fooddiv >= 0.7) { std::cout << (char)178; rest--; }
+				if (Fooddiv >= 0.8) { std::cout << (char)178; rest--; }
+				if (Fooddiv >= 0.9) { std::cout << (char)178; rest--; }
+				if (Fooddiv >= 1) { std::cout << (char)178; rest--; }
+				for (; rest > 0; rest--) { std::cout << (char)205; }
+				SetColor(15); std::cout << ']';
+			}
+			else if (y == C_Y - 2) {
+				int ManaInt = Player.Mana;
+				int ManaMaxInt = Player.ManaMax;
+				SetColor(3); std::cout << "Mana: " << ManaInt << '/' << ManaMaxInt; SetColor(15);
+				std::cout << '\t' << '['; SetColor(3);
+				if (Manadiv >= 0.1) { std::cout << (char)178; rest--; }
+				if (Manadiv >= 0.2) { std::cout << (char)178; rest--; }
+				if (Manadiv >= 0.3) { std::cout << (char)178; rest--; }
+				if (Manadiv >= 0.4) { std::cout << (char)178; rest--; }
+				if (Manadiv >= 0.5) { std::cout << (char)178; rest--; }
+				if (Manadiv >= 0.6) { std::cout << (char)178; rest--; }
+				if (Manadiv >= 0.7) { std::cout << (char)178; rest--; }
+				if (Manadiv >= 0.8) { std::cout << (char)178; rest--; }
+				if (Manadiv >= 0.9) { std::cout << (char)178; rest--; }
+				if (Manadiv >= 1) { std::cout << (char)178; rest--; }
+				for (; rest > 0; rest--) { std::cout << (char)205; }
+				SetColor(15); std::cout << ']';
+			}
+			else if (y == C_Y - 3) {
+				int ExperienceInt = Player.Experience;
+				int ExpToLvlUPInt = Player.ExpToLvlUP;
+				SetColor(10);
+				std::cout << "exp: " << ExperienceInt << '/' << ExpToLvlUPInt; SetColor(15);
+				std::cout << '\t' << '['; SetColor(10);
+				if (Expdiv >= 0.1) { std::cout << (char)178; rest--; }
+				if (Expdiv >= 0.2) { std::cout << (char)178; rest--; }
+				if (Expdiv >= 0.3) { std::cout << (char)178; rest--; }
+				if (Expdiv >= 0.4) { std::cout << (char)178; rest--; }
+				if (Expdiv >= 0.5) { std::cout << (char)178; rest--; }
+				if (Expdiv >= 0.6) { std::cout << (char)178; rest--; }
+				if (Expdiv >= 0.7) { std::cout << (char)178; rest--; }
+				if (Expdiv >= 0.8) { std::cout << (char)178; rest--; }
+				if (Expdiv >= 0.9) { std::cout << (char)178; rest--; }
+				if (Expdiv >= 1) { std::cout << (char)178; rest--; }
+				for (; rest > 0; rest--) { std::cout << (char)205; }
+				SetColor(15); std::cout << ']';
+			}
+						
 			std::cout << '\n';
  
 		}
 
-		std::cout << (char)200;//for the frame
-		for (short int x = 0; x < C_X; x++)//for the frame
+		std::cout << (char)200; 
+		for(short int x = 0; x < C_X; x++) 
 		{
 			std::cout << (char)205;
 
 		}
-		std::cout << (char)188 << '\n';//for the frame
+		std::cout << (char)188 << '\n'; 
 
 
 	}
@@ -587,6 +635,9 @@ bool CheckCircle(short int &Y_, short int &X_, short int Range, short int Target
 struct EnemyStruct
 {
 	std::string Name = "ERROR";
+	std::string Who;
+
+	int X,Y;
 
 	bool Alive = true;
 
@@ -601,6 +652,15 @@ struct EnemyStruct
 	double Defense;
 
 	short int GiveExperience;
+
+	void BattleAI()
+	{
+		//memo add more option and make them random 
+		if (Alive)
+		{
+			Player.HP -= Damage - Player.Defense;
+		}
+	}
 
 }; EnemyStruct Enemy;
 
@@ -625,7 +685,7 @@ private:
 	short int LVL = 1;
 
 	//damage
-	double Damage;
+	double Damage = 4.5;
 
 	//Maximum Health poshort ints Ammount
 	double HPMax = 25;
@@ -634,7 +694,7 @@ private:
 	double HP = HPMax;
 
 	//Defense: Damage - Defense = Damage done 
-	double Defense;
+	double Defense = 0.2;
 
 	//Experience Enemy: Zombie give
 	short int GiveExperience = 20;
@@ -670,6 +730,8 @@ public:
 	void SetEnemyValues()
 	{
 		if (InBattle) {
+			Enemy.X = X;
+			Enemy.Y = Y;
 			Enemy.LVL = LVL;
 			Enemy.HPMax = HPMax;
 			Enemy.HP = HP;
@@ -929,12 +991,12 @@ public:
 	bool Alive = true;
 
 private:
-
+	
 	//level of Enemy: zombie
 	short int LVL = 1;
 
 	//damage
-	double Damage = 12;
+	double Damage = 7.5;
 
 	//Maximum Health poshort ints Ammount
 	double HPMax = 30;
@@ -979,6 +1041,8 @@ public:
 	void SetEnemyValues()
 	{
 		if (InBattle) {
+			Enemy.X = X;
+			Enemy.Y = Y;
 			Enemy.LVL = LVL;
 			Enemy.HPMax = HPMax;
 			Enemy.HP = HP;
@@ -1613,89 +1677,105 @@ public:
 
 class BattleClass
 {
-public:
-	
+	//for decision like: Attack or Use Speel...
+	char BattleSet = ' ';
+	bool Err = false;
 
-
-	int CheckForCorrispondence(short int X_, short int Y_ )
+	struct PlayerNewLvlMultiplier
 	{
-		if (Dungeon.EntityMap[X_][Y_] != 0)
-		{
-			
+		float HPMax = 1.15;
+		float BaseDefense = 1.2;
+		float ManaMax = 1.12;
+		float FoodMax = 1.08;
+		float BaseDamage = 1.15;
+		float ExpToLvlUP = 1.1;
+
+	}; PlayerNewLvlMultiplier PlayerMulti;
+
+public:
+
+	int CheckForCorrispondence(short int Y_ ,short int X_ )
+	{
+		if (Dungeon.EntityMap[Y_][X_] != 0)
+		{			
 			BattleMode = true;
 			ExploreMode = false;
+			Enemy.Alive = true;
 
-			if (Dungeon.EntityMap[X_][Y_] == 2) 
+			if (Dungeon.EntityMap[Y_][X_] == 2) 
 			{
-				std::cout << "\nits a slime\n";
-				if (X_ == Slime01.X && Y_ == Slime01.Y ) {
+				if (X_ == Slime01.X && Y_ == Slime01.Y && Slime01.Active && Slime01.Alive ) {
 					Slime01.InBattle = true;
 					Slime01.SetEnemyValues();
 					return 0;
 				}
 				else{ Slime01.InBattle = false; }
 
-				if (X_ == Slime02.X && Y_ == Slime02.Y ) {
+				if (X_ == Slime02.X && Y_ == Slime02.Y && Slime02.Active && Slime02.Alive) {
 					Slime02.InBattle = true;
 					Slime02.SetEnemyValues(); 
 					return 0;
 				}
 				else { Slime02.InBattle = false; }
 
-				if (X_ == Slime03.X && Y_ == Slime03.Y ) {
+				if (X_ == Slime03.X && Y_ == Slime03.Y && Slime03.Active && Slime03.Alive) {
 					Slime03.InBattle = true;
 					Slime03.SetEnemyValues();
 					return 0;
 				}
 				else { Slime03.InBattle = false; }
 
-				if (X_ == Slime04.X && Y_ == Slime04.Y ) {
+				if (X_ == Slime04.X && Y_ == Slime04.Y && Slime04.Active && Slime04.Alive) {
 					Slime04.InBattle = true;
 					Slime04.SetEnemyValues();
 					return 0;
 				}
 				else { Slime04.InBattle = false; }
 
-				if (X_ == Slime05.X && Y_ == Slime05.Y ) {
+				if (X_ == Slime05.X && Y_ == Slime05.Y && Slime05.Active && Slime05.Alive) {
 					Slime05.InBattle = true;
 					Slime05.SetEnemyValues();
 					return 0;
 				}
 				else { Slime05.InBattle = false; }
-				std::cout << "\nERROR\nnone was chosed as enemy...\n";
 			}
-			if (Dungeon.EntityMap[X_][Y_] == 3)
+			if (Dungeon.EntityMap[Y_][X_] == 3)
 			{
 				std::cout << "\nits a Zombie\n";
-				if (X_ == Zombie01.X && Y_ == Zombie01.Y ) {
+				if (X_ == Zombie01.X && Y_ == Zombie01.Y && Zombie01.Active && Zombie01.Alive) {
+					std::cout << "\nZombie01\n";
 					Zombie01.InBattle = true;
 					Zombie01.SetEnemyValues();
 					return 0;
 				}
 				else { Zombie01.InBattle = false; }
 
-				if (X_ == Zombie02.X && Y_ == Zombie02.Y ) {
+				if ( X_ == Zombie02.X && Y_ == Zombie02.Y && Zombie02.Active && Zombie02.Alive) {
+					std::cout << "\nZombie02\n";
 					Zombie02.InBattle = true;
 					Zombie02.SetEnemyValues();
 					return 0;
 				}
 				else { Zombie02.InBattle = false; }
 
-				if (X_ == Zombie03.X && Y_ == Zombie03.Y ) {
+				if ( X_ == Zombie03.X && Y_ == Zombie03.Y && Zombie03.Active && Zombie03.Alive) {
+					std::cout << "\nZombie03\n";
 					Zombie03.InBattle = true;
 					Zombie03.SetEnemyValues();
 					return 0;
 				}
 				else { Zombie03.InBattle = false; }
 
-				if (X_ == Zombie04.X && Y_ == Zombie04.Y ) {
+				if ( X_ == Zombie04.X && Y_ == Zombie04.Y && Zombie04.Active && Zombie04.Alive) {
+					std::cout << "\nZombie04\n";
 					Zombie04.InBattle = true;
 					Zombie04.SetEnemyValues();
 					return 0;
 				}
 				else { Zombie04.InBattle = false; }
 
-				if (X_ == Zombie05.X && Y_ == Zombie05.Y ) {
+				if (X_ == Zombie05.X && Y_ == Zombie05.Y && Zombie05.Active && Zombie05.Alive){
+					std::cout << "\nZombie05\n";
 					Zombie05.InBattle = true;
 					Zombie05.SetEnemyValues();
 					return 0;
@@ -1707,8 +1787,6 @@ public:
 
 		}
 	}
-
-	
 
 	void CheckForFight()
 	{
@@ -1724,52 +1802,121 @@ public:
 
 	void PrintBattle()
 	{
+		double EHPdiv = Enemy.HP / Enemy.HPMax;
+		double HPdiv = Player.HP / Player.HPMax;
+		double Manadiv = Player.Mana / Player.ManaMax;
+		double Ediv = Player.Experience / Player.ExpToLvlUP;
+		int rest = 10;
+
 		std::cout << (char)201;
 		for (short int m = 0; m < 50; m++) { std::cout << (char)205; }
 		std::cout << (char)187 << '\n'<< (char)186;; 
-		if (Enemy.Name == "Slime") { SetColor(10); std::cout << 'o'; SetColor(7); }
-		if (Enemy.Name == "Zombie") { SetColor(2); std::cout << (char)1 ; SetColor(7); }
-		std::cout << " Enemy: " << Enemy.Name;;
+		if (Enemy.Name == "Slime") { SetColor(10); std::cout << 'o'; SetColor(15); }
+		if (Enemy.Name == "Zombie") { SetColor(2); std::cout << (char)1 ; SetColor(15); }
+		std::cout << " Enemy: " << Enemy.Name;
 		for (short int m = 0; m < (27 - Enemy.Name.size() ); m++) { std::cout << ' '; }
 		std::cout << "Lvl: " << Enemy.LVL;
 		if(Enemy.LVL < 10){ std::cout << ' '; }
-		std::cout << "       " << (char)186 << '\n';
-		std::cout << (char)186 << "  HP: " << Enemy.HP << '/' << Enemy.HPMax ;
+		std::cout << "       " << (char)186 << '\n' << (char)186 << "  ";
+
+		int EHPInt = Enemy.HP;
+		int EHPMaxInt = Enemy.HPMax;
+		SetColor(12); std::cout << "HP: " << EHPInt << '/' << EHPMaxInt; SetColor(15);
+		std::cout << "  " << '['; SetColor(12);
+		if (EHPdiv >= 0.1) { std::cout << (char)178; rest--; }
+		if (EHPdiv >= 0.2) { std::cout << (char)178; rest--; }
+		if (EHPdiv >= 0.3) { std::cout << (char)178; rest--; }
+		if (EHPdiv >= 0.4) { std::cout << (char)178; rest--; }
+		if (EHPdiv >= 0.5) { std::cout << (char)178; rest--; }
+		if (EHPdiv >= 0.6) { std::cout << (char)178; rest--; }
+		if (EHPdiv >= 0.7) { std::cout << (char)178; rest--; }
+		if (EHPdiv >= 0.8) { std::cout << (char)178; rest--; }
+		if (EHPdiv >= 0.9) { std::cout << (char)178; rest--; }
+		if (EHPdiv >= 1)   { std::cout << (char)178; rest--; }
+		for (; rest > 0; rest--) { std::cout << (char)205; }
+		SetColor(15); std::cout << ']';
+
 		if (Enemy.HP < 10 ) { std::cout << ' '; }
 		if (Enemy.HP < 100) { std::cout << ' '; }
 		if (Enemy.HP < 1000) { std::cout << ' '; }
 		if (Enemy.HPMax < 100) { std::cout << ' '; }
 		if (Enemy.HPMax < 1000) { std::cout << ' '; }
-		for (short int m = 0; m < 22; m++) { std::cout << ' '; }
-		std::cout << "Def: " << Enemy.Defense<< "      ";
+		for (short int m = 0; m < 7; m++) { std::cout << ' '; }
+		int EDefInt = Enemy.Defense;
+		SetColor(7);
+		std::cout << "Def: " << EDefInt  << "      ";
+		SetColor(15);
 		if (Enemy.Defense < 10) { std::cout << ' '; }
 		if (Enemy.Defense < 100) { std::cout << ' '; }  
 		std::cout << (char)186 << '\n' << (char)204;
 		for (short int m = 0; m < 50; m++) { std::cout << (char)205; }
 		std::cout << (char)185 << '\n' << (char)186;
-		SetColor(12);std::cout << (char)2 ;SetColor(7);
+		SetColor(12);std::cout << (char)2 ;SetColor(15);
 		std::cout << ' ' << Player.Name;
 		for (short int m = 0; m < (34 - Player.Name.size() ); m++) { std::cout << ' '; }
 		std::cout << "Lvl: " << Player.LVL;
 		if (Player.LVL < 10) { std::cout << ' '; }
-		std::cout << "       " << (char)186 << '\n' << (char)186 << "  HP: " << Player.HP << '/' << Player.HPMax;
+		std::cout << "       " << (char)186 << '\n' << (char)186 << "  ";
+
+		int HPInt = Player.HP;
+		int HPMaxInt = Player.HPMax;
+		SetColor(12); std::cout << "HP: " << HPInt << '/' << HPMaxInt; SetColor(15);
+		std::cout << "  " << '['; SetColor(12);
+		if (HPdiv >= 0.1) { std::cout << (char)178; rest--; }
+		if (HPdiv >= 0.2) { std::cout << (char)178; rest--; }
+		if (HPdiv >= 0.3) { std::cout << (char)178; rest--; }
+		if (HPdiv >= 0.4) { std::cout << (char)178; rest--; }
+		if (HPdiv >= 0.5) { std::cout << (char)178; rest--; }
+		if (HPdiv >= 0.6) { std::cout << (char)178; rest--; }
+		if (HPdiv >= 0.7) { std::cout << (char)178; rest--; }
+		if (HPdiv >= 0.8) { std::cout << (char)178; rest--; }
+		if (HPdiv >= 0.9) { std::cout << (char)178; rest--; }
+		if (HPdiv >= 1) { std::cout << (char)178; rest--; }
+		for (; rest > 0; rest--) { std::cout << (char)205; }
+		SetColor(15); std::cout << ']';
+
 		if (Player.HP < 10) { std::cout << ' '; }
 		if (Player.HP < 100) { std::cout << ' '; }
 		if (Player.HP < 1000) { std::cout << ' '; }
 		if (Player.HPMax < 100) { std::cout << ' '; }
 		if (Player.HPMax < 1000) { std::cout << ' '; }
-		for (short int m = 0; m < 21; m++) { std::cout << ' '; }
-		std::cout << "Def: " << std::setprecision(1) << Player.Defense << std::fixed <<"      ";
+		for (short int m = 0; m < 7; m++) { std::cout << ' '; }
+		int DefInt = Player.Defense;
+		SetColor(7);
+		std::cout << "Def: " << DefInt <<"      ";
+		SetColor(15);
 		if (Player.Defense < 10) { std::cout << ' '; }
 		if (Player.Defense < 100) { std::cout << ' '; }
-		std::cout << (char)186 << '\n' << (char)186 << "  " << "Mana: " << Player.Mana << '/' << Player.ManaMax;
+		std::cout << (char)186 << '\n' << (char)186 << "  ";
+
+		int ManaInt = Player.Mana;
+		int ManaMaxInt = Player.ManaMax;
+		SetColor(3); std::cout << "Mana: " << ManaInt << '/' << ManaMaxInt; SetColor(15);
+		std::cout << '\t' << '['; SetColor(3);
+		if (Manadiv >= 0.1) { std::cout << (char)178; rest--; }
+		if (Manadiv >= 0.2) { std::cout << (char)178; rest--; }
+		if (Manadiv >= 0.3) { std::cout << (char)178; rest--; }
+		if (Manadiv >= 0.4) { std::cout << (char)178; rest--; }
+		if (Manadiv >= 0.5) { std::cout << (char)178; rest--; }
+		if (Manadiv >= 0.6) { std::cout << (char)178; rest--; }
+		if (Manadiv >= 0.7) { std::cout << (char)178; rest--; }
+		if (Manadiv >= 0.8) { std::cout << (char)178; rest--; }
+		if (Manadiv >= 0.9) { std::cout << (char)178; rest--; }
+		if (Manadiv >= 1) { std::cout << (char)178; rest--; }
+		for (; rest > 0; rest--) { std::cout << (char)205; }
+		SetColor(15); std::cout << ']';
+
 		if (Player.Mana < 10) { std::cout << ' '; }
 		if (Player.Mana < 100) { std::cout << ' '; }
 		if (Player.Mana < 1000) { std::cout << ' '; }
 		if (Player.ManaMax < 100) { std::cout << ' '; }
 		if (Player.ManaMax < 1000) { std::cout << ' '; }
-		for (short int m = 0; m < 19; m++) { std::cout << ' '; }
-		std::cout << "Exp: " << Player.Experience << '/' << Player.ExpToLvlUP;
+		for (short int m = 0; m < 5; m++) { std::cout << ' '; }
+		int ExpInt = Player.Experience;
+		int ExpToLVLUPInt = Player.ExpToLvlUP;
+		SetColor(10);
+		std::cout << "Exp: " << ExpInt << '/' << ExpToLVLUPInt;
+		SetColor(15);
 		if (Player.Experience < 10) { std::cout << ' '; }
 		if (Player.Experience < 100) { std::cout << ' '; }
 		if (Player.Experience < 1000) { std::cout << ' '; }
@@ -1806,11 +1953,205 @@ public:
 		std::cout << (char)188;
 	}
 
-public:
+	short int Decision()
+	{
+		if (BattleSet != ' ' )
+		{
+			if (BattleSet == 'w' || BattleSet == 'W')
+			{
+				if (Enemy.Defense != Player.Damage)
+				{
+					Enemy.HP -=(Player.Damage - Enemy.Defense );
+					Err = false;
+				}
+				
+				
+			}
+			else if (BattleSet == 'a' || BattleSet == 'A')
+			{
+				Err = false;
+			}
+			else if (BattleSet == 'q' || BattleSet == 'Q')
+			{
+				Err = false;
+			}
+			else if (BattleSet == 'e' || BattleSet == 'E')
+			{
+				Err = false;
+			}
+			else
+			{
+				Err = true;
+			}
+		}
+		return 0;
+	}
+
 	void Start()
 	{
-		PrintBattle();
 
+	}
+
+	void CheckEnemyInBattle()
+	{
+		if (Slime01.InBattle)
+		{
+			Slime01.Alive = false;
+			Slime01.InBattle = false;
+		}
+		if (Slime02.InBattle)
+		{
+			Slime02.Alive = false;
+			Slime02.InBattle = false;
+		}
+		if (Slime03.InBattle)
+		{
+			Slime03.Alive = false;
+			Slime03.InBattle = false;
+		}
+		if (Slime04.InBattle)
+		{
+			Slime04.Alive = false;
+			Slime04.InBattle = false;
+		}
+		if (Slime05.InBattle)
+		{
+			Slime05.Alive = false;
+			Slime05.InBattle = false;
+		}
+		if (Zombie01.InBattle)
+		{
+			Zombie01.Alive = false;
+			Zombie01.InBattle = false;
+		}
+		if (Zombie02.InBattle)
+		{
+			Zombie02.Alive = false;
+			Zombie02.InBattle = false;
+		}
+		if (Zombie03.InBattle)
+		{
+			Zombie03.Alive = false;
+			Zombie03.InBattle = false;
+		}
+		if (Zombie04.InBattle)
+		{
+			Zombie04.Alive = false;
+			Zombie04.InBattle = false;
+		}
+		if (Zombie05.InBattle)
+		{
+			Zombie05.Alive = false;
+			Zombie05.InBattle = false;
+		}
+	}
+
+	void Update()
+	{
+		PrintBattle();
+		do {
+			std::cin >> BattleSet;
+			Decision();			
+			if (Enemy.HP <= 0)
+			{			
+				Enemy.Alive = false;
+				BattleMode = false;
+				Dungeon.EntityMap[Enemy.Y][Enemy.X] = 0;
+				CheckEnemyInBattle();
+				Finish();
+			}
+			Enemy.BattleAI();
+			if (Player.HP <= 0)
+			{
+				Player.Alive = false;
+				BattleMode = false;
+			}
+			
+		} while (Err);
+	}
+
+	void Finish()
+	{
+		if (!BattleMode)
+		{
+			Enemy.GiveExperience = 10;
+			int ExpInt = Player.Experience;
+			int ExpToLvlUPInt = Player.ExpToLvlUP;
+			int GivExpInt = Enemy.GiveExperience;
+			std::cout << (char)201;
+			for (short int m = 0; m < 30; m++) { std::cout << (char)205; }
+			std::cout << (char)187 << '\n' << (char)186;
+			if (ExpInt < 10) { std::cout << ' '; }
+			if (ExpInt < 100) { std::cout << ' '; }
+			if (ExpInt < 1000) { std::cout << ' '; }
+			if (GivExpInt < 10) { std::cout << ' '; }
+			if (GivExpInt < 100) { std::cout << ' '; }
+			if (GivExpInt < 1000) { std::cout << ' '; }
+			if (ExpToLvlUPInt < 100) { std::cout << ' '; }
+			if (ExpToLvlUPInt < 1000) { std::cout << ' '; }
+			std::cout << "Exp: " << ExpInt << " + " << GivExpInt << " = ";
+			Player.Experience += Enemy.GiveExperience;
+			ExpInt = Player.Experience;
+			std::cout << ExpInt << '/' << ExpToLvlUPInt << "  ";
+			if (ExpInt < 10) { std::cout << ' '; }
+			if (ExpInt < 100) { std::cout << ' '; }
+			if (ExpInt < 1000) { std::cout << ' '; }
+			std::cout << (char)186 << '\n' << (char)204;
+			for (short int m = 0; m < 30; m++) { std::cout << (char)205; }
+			std::cout << (char)185 << '\n' << (char)186;
+			bool Newlvl = false;
+			//memo a lot o things to add
+			if (Player.Experience >= Player.ExpToLvlUP)
+			{
+				Newlvl = true;
+				Player.Experience -= Player.ExpToLvlUP;
+				Player.LVL++;
+			}
+
+			if (Newlvl) {
+				std::cout << "       !! NEW LEVEL !!        ";
+			}
+			else {
+				std::cout << "                              ";
+			}
+			std::cout << (char)186 << '\n' << (char)186;
+			if (Newlvl) {
+				std::cout << "     Player LVL is now: " << Player.LVL << "   ";
+				if (Player.LVL < 10) { std::cout << ' '; }
+				if (Player.LVL < 100) { std::cout << ' '; }
+				
+			}
+			else {
+				std::cout << "                              ";
+			}
+			std::cout << (char)186 << '\n' << (char)200;
+			for (short int m = 0; m < 30; m++) { std::cout << (char)205; }
+			std::cout << (char)188;
+			char x;
+			
+			if (Newlvl)
+			{
+				Player.BaseDamage *= PlayerMulti.BaseDamage;
+				Player.Damage = Player.WeaponDamage + Player.BaseDamage;
+				Player.BaseDefense *= PlayerMulti.BaseDefense;
+				Player.Defense = Player.Armor + Player.BaseDefense;
+				Player.BaseHP *= PlayerMulti.HPMax;
+				Player.HPMax = Player.BaseHP + Player.ArmorHP;
+				Player.BaseMana *= PlayerMulti.ManaMax;
+				Player.ManaMax = Player.BaseMana + Player.ArmorMana;
+				Player.FoodMax *= PlayerMulti.FoodMax;
+				Player.ExpToLvlUP *= PlayerMulti.ExpToLvlUP;
+				Newlvl = false;
+			}
+			Newlvl = false;
+
+			std::cout << "\npress any key and enter to continue: ";
+			std::cin >> x;
+
+			ExploreMode = true;
+
+
+		}
 	}
 
 }; BattleClass Battle;
@@ -1840,7 +2181,8 @@ public:
 	//1st function called at every Player Spawn
 	void Start()
 	{
-		SetColor(7);
+		
+		SetColor(15);
 		Dungeon.SetMap();
 		Spawn.Spawn();
 		Dungeon.SetValues();
@@ -1852,12 +2194,22 @@ public:
 	{
 		if (ExploreMode)
 		{
+			system(" cls ");
 			Dungeon.PrintMap();
 			Mov.Move();
 			Player.Food -= 0.5;
+			Battle.CheckForFight();
+			if (BattleMode)
+			{
+				return 1;
+			}
 			GameAI();
 			Battle.CheckForFight();
-			//system(" cls ");
+			system(" cls ");
+			if (BattleMode)
+			{
+				return 1;
+			}
 			return 0;
 		}
 	}
@@ -1866,10 +2218,9 @@ public:
 	{
 		if (BattleMode)
 		{
-			//system(" cls ");
-			Battle.Start();
-			std::cin.ignore(2);
-			return 0;
+			system(" cls ");
+			Battle.Update();
+			system(" cls ");
 		}
 		else {
 			return 1;
