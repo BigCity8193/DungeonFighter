@@ -1,5 +1,4 @@
 ﻿#include "stdafx.h"
-#include "Dungeon.h"
 #include <iostream>
 #include <conio.h>
 #include <windows.h>
@@ -50,12 +49,15 @@ public:
 	//Check if player already spawned
 	bool Spawned = false;
 
+	//Check if player has got the key
+	bool Key = true;
+
 	//level of player
 	short int LVL = 1;	
 	//Experience needed to level up when experience = 0
 	float ExpToLvlUP = 100;
 	//Experience
-	float Experience = 90;	
+	float Experience = 0;	
 
 	//BaseDamage + WeaponDamage = Damage
 	double BaseDamage = 12.5;
@@ -291,6 +293,40 @@ public:
 		}
 		else if( Stage == 2 )
 		{
+			Set_Map = 1 + rand() % 1;
+
+			switch (Set_Map)
+			{
+
+			case 1:
+			{
+				C_X = MMem.s2.m1.M_X;
+				C_Y = MMem.s2.m1.M_Y;
+				for (short int i = 0; i < C_Y; i++)
+				{
+					for (short int j = 0; j < C_X; j++)
+					{
+						Map[i][j] = MMem.s2.m1.Map[i][j];
+					}
+				}
+				break;
+			}
+			/*case 2:
+			{
+				C_X = MMem.s2.m2.M_X;
+				C_Y = MMem.s2.m2.M_Y;
+				for (short int i = 0; i < C_Y; i++)
+				{
+					for (short int j = 0; j < C_X; j++)
+					{
+						Map[i][j] = MMem.s1.m2.Map[i][j];
+					}
+				}
+
+				break;
+			}*/
+			}
+
 		}
 		
 
@@ -382,6 +418,10 @@ public:
 					SetColor(2);
 					std::cout << ZombieCh;
 					SetColor(15);
+				}
+				else if (ItemLayer1[y - 1][x] == 1)
+				{//item key
+					std::cout << KeyCh;
 				}
 				else if ( Map[ y - 1 ][ x ] == 100 )
 				{	//Wall
@@ -679,6 +719,9 @@ public:
 
 	//if Slime is Alive
 	bool Alive = true;
+
+	//if Zombie is the last one vs Player
+	bool LastEnemy = false;
 private:
 
 	//level of Enemy: Slime
@@ -990,6 +1033,9 @@ public:
 	//if Zombie is Alive
 	bool Alive = true;
 
+	//if Zombie is the last one vs Player
+	bool LastEnemy = false;
+
 private:
 	
 	//level of Enemy: zombie
@@ -1285,6 +1331,7 @@ public:
 
 class SpawnClass
 {
+	bool KeySpawned = false;
 public:
 	//Function called to make the Entity: Player 
 	void Spawn()
@@ -1295,6 +1342,9 @@ public:
 			{
 				for (short int Xfor = 0; Xfor < C_X; Xfor++)
 				{
+					Dungeon.ItemLayer1[Yfor][Xfor] = 0;
+					Dungeon.ItemLayer2[Yfor][Xfor] = 0;
+
 					if ( Dungeon.Map[Yfor][Xfor] == 2)
 					{
 						Dungeon.EntityMap[Yfor][Xfor] = 1;
@@ -1308,26 +1358,25 @@ public:
 		}
 	}
 
-
-
 	//Function made for spawning entity like Enemies in a random place
 	void RandSpawn(char EnemyType)
 	{
+		Slime01.Active = true; Slime01.Alive = true;
+		Slime02.Active = true; Slime02.Alive = true;
+		Slime03.Active = true; Slime03.Alive = true;
+		Slime04.Active = true; Slime04.Alive = true;
+		Slime05.Active = true; Slime05.Alive = true;
+
+		Zombie01.Active = false; Zombie01.Alive = false;
+		Zombie02.Active = false; Zombie02.Alive = false;
+		Zombie03.Active = false; Zombie03.Alive = false;
+		Zombie04.Active = false; Zombie04.Alive = false;
+		Zombie05.Active = false; Zombie05.Alive = false;
+
+
 		short int X1, Y1;
 		short int MaxEnemytype;
-		char EntityIdentifier;
-
-		//Bug Active and Alive
-		//set every enemy death and not active
-		//Slime01.Active = false;		Slime01.Alive = false;		Slime02.Active = false;		Slime02.Alive = false;
-		//Slime03.Active = false;		Slime03.Alive = false;		Slime04.Active = false;		Slime04.Alive = false;
-		//Slime05.Active = false;		Slime05.Alive = false;
-
-		Zombie01.Active = false;	Zombie01.Alive = false;		Zombie02.Active = false;	Zombie02.Alive = false;
-		Zombie03.Active = false;	Zombie03.Alive = false;		Zombie04.Active = false;	Zombie04.Alive = false;
-		Zombie05.Active = false;	Zombie05.Alive = false;
-
-		
+		char EntityIdentifier;	
 
 		if (EnemyType == 'S')
 		{
@@ -1442,6 +1491,51 @@ public:
 
 			} while (!PossibleSpawn);
 		}
+	}
+
+	void SpawnKey()
+	{
+		short int EnemyAlive = 0;
+		/*std::cout << "\nStarting\n";*/
+		if (Slime01.Alive) { EnemyAlive++; /*std::cout << "\nEnemyAlive++\n";*/ }
+		if (Slime02.Alive) { EnemyAlive++; /*std::cout << "\nEnemyAlive++\n";*/ }
+		if (Slime03.Alive) { EnemyAlive++; /*std::cout << "\nEnemyAlive++\n";*/ }
+		if (Slime04.Alive) { EnemyAlive++; /*std::cout << "\nEnemyAlive++\n";*/ }
+		if (Slime05.Alive) { EnemyAlive++; /*std::cout << "\nEnemyAlive++\n";*/ }
+		if (Zombie01.Alive) { EnemyAlive++; /*std::cout << "\nEnemyAlive++\n";*/ }
+		if (Zombie02.Alive) { EnemyAlive++; /*std::cout << "\nEnemyAlive++\n";*/ }
+		if (Zombie03.Alive) { EnemyAlive++; /*std::cout << "\nEnemyAlive++\n";*/ }
+		if (Zombie04.Alive) { EnemyAlive++; /*std::cout << "\nEnemyAlive++\n";*/ }
+		if (Zombie05.Alive) { EnemyAlive++; /*std::cout << "\nEnemyAlive++\n";*/ }
+
+		if (EnemyAlive == 1){
+			/*std::cout << "\nEnemyAlive == 1\n";*/
+			//todo add to put item on ItemLayer1 to ItemLayer2 before placing a key
+			if (Slime01.Alive) { Slime01.LastEnemy = true; }
+			if (Slime02.Alive) { Slime01.LastEnemy = true; }
+			if (Slime03.Alive) { Slime01.LastEnemy = true; }
+			if (Slime04.Alive) { Slime01.LastEnemy = true; }
+			if (Slime05.Alive) { Slime01.LastEnemy = true; }
+			if (Zombie01.Alive) { Zombie01.LastEnemy = true; }
+			if (Zombie02.Alive) { Zombie01.LastEnemy = true; }
+			if (Zombie03.Alive) { Zombie01.LastEnemy = true; }
+			if (Zombie04.Alive) { Zombie01.LastEnemy = true; }
+			if (Zombie05.Alive) { Zombie01.LastEnemy = true; }
+		}
+		else if(EnemyAlive == 0 && KeySpawned == false){
+			/*std::cout << "\nEnemyAlive == 0\n";*/
+			if (Slime01.LastEnemy) { Dungeon.ItemLayer1[Slime01.Y][Slime01.X] = 1; KeySpawned = true; }
+			if (Slime02.LastEnemy) { Dungeon.ItemLayer1[Slime02.Y][Slime02.X] = 1; KeySpawned = true; }
+			if (Slime03.LastEnemy) { Dungeon.ItemLayer1[Slime03.Y][Slime03.X] = 1; KeySpawned = true; }
+			if (Slime04.LastEnemy) { Dungeon.ItemLayer1[Slime04.Y][Slime04.X] = 1; KeySpawned = true; }
+			if (Slime05.LastEnemy) { Dungeon.ItemLayer1[Slime05.Y][Slime05.X] = 1; KeySpawned = true; }
+			if (Zombie01.LastEnemy) { Dungeon.ItemLayer1[Zombie01.Y][Zombie01.X] = 1; KeySpawned = true; }
+			if (Zombie02.LastEnemy) { Dungeon.ItemLayer1[Zombie02.Y][Zombie02.X] = 1; KeySpawned = true; }
+			if (Zombie03.LastEnemy) { Dungeon.ItemLayer1[Zombie03.Y][Zombie03.X] = 1; KeySpawned = true; }
+			if (Zombie04.LastEnemy) { Dungeon.ItemLayer1[Zombie04.Y][Zombie04.X] = 1; KeySpawned = true; }
+			if (Zombie05.LastEnemy) { Dungeon.ItemLayer1[Zombie05.Y][Zombie05.X] = 1; KeySpawned = true; }
+		}
+
 	}
 
 }; SpawnClass Spawn;
@@ -1689,7 +1783,6 @@ class BattleClass
 		float FoodMax = 1.08;
 		float BaseDamage = 1.15;
 		float ExpToLvlUP = 1.1;
-
 	}; PlayerNewLvlMultiplier PlayerMulti;
 
 public:
@@ -1819,9 +1912,10 @@ public:
 		if(Enemy.LVL < 10){ std::cout << ' '; }
 		std::cout << "       " << (char)186 << '\n' << (char)186 << "  ";
 
+		rest = 10;
 		int EHPInt = Enemy.HP;
 		int EHPMaxInt = Enemy.HPMax;
-		SetColor(12); std::cout << "HP: " << EHPInt << '/' << EHPMaxInt; SetColor(15);
+		std::cout << "HP: " << EHPInt << '/' << EHPMaxInt;
 		std::cout << "  " << '['; SetColor(12);
 		if (EHPdiv >= 0.1) { std::cout << (char)178; rest--; }
 		if (EHPdiv >= 0.2) { std::cout << (char)178; rest--; }
@@ -1843,9 +1937,7 @@ public:
 		if (Enemy.HPMax < 1000) { std::cout << ' '; }
 		for (short int m = 0; m < 7; m++) { std::cout << ' '; }
 		int EDefInt = Enemy.Defense;
-		SetColor(7);
 		std::cout << "Def: " << EDefInt  << "      ";
-		SetColor(15);
 		if (Enemy.Defense < 10) { std::cout << ' '; }
 		if (Enemy.Defense < 100) { std::cout << ' '; }  
 		std::cout << (char)186 << '\n' << (char)204;
@@ -1858,10 +1950,10 @@ public:
 		if (Player.LVL < 10) { std::cout << ' '; }
 		std::cout << "       " << (char)186 << '\n' << (char)186 << "  ";
 
+		rest = 10;
 		int HPInt = Player.HP;
 		int HPMaxInt = Player.HPMax;
-		SetColor(12); std::cout << "HP: " << HPInt << '/' << HPMaxInt; SetColor(15);
-		std::cout << "  " << '['; SetColor(12);
+		std::cout << "HP: " << HPInt << '/' << HPMaxInt << "  " << '['; SetColor(12);;
 		if (HPdiv >= 0.1) { std::cout << (char)178; rest--; }
 		if (HPdiv >= 0.2) { std::cout << (char)178; rest--; }
 		if (HPdiv >= 0.3) { std::cout << (char)178; rest--; }
@@ -1882,16 +1974,15 @@ public:
 		if (Player.HPMax < 1000) { std::cout << ' '; }
 		for (short int m = 0; m < 7; m++) { std::cout << ' '; }
 		int DefInt = Player.Defense;
-		SetColor(7);
 		std::cout << "Def: " << DefInt <<"      ";
-		SetColor(15);
 		if (Player.Defense < 10) { std::cout << ' '; }
 		if (Player.Defense < 100) { std::cout << ' '; }
 		std::cout << (char)186 << '\n' << (char)186 << "  ";
 
+		rest = 10;
 		int ManaInt = Player.Mana;
 		int ManaMaxInt = Player.ManaMax;
-		SetColor(3); std::cout << "Mana: " << ManaInt << '/' << ManaMaxInt; SetColor(15);
+		std::cout << "Mana: " << ManaInt << '/' << ManaMaxInt;
 		std::cout << '\t' << '['; SetColor(3);
 		if (Manadiv >= 0.1) { std::cout << (char)178; rest--; }
 		if (Manadiv >= 0.2) { std::cout << (char)178; rest--; }
@@ -1914,9 +2005,7 @@ public:
 		for (short int m = 0; m < 5; m++) { std::cout << ' '; }
 		int ExpInt = Player.Experience;
 		int ExpToLVLUPInt = Player.ExpToLvlUP;
-		SetColor(10);
 		std::cout << "Exp: " << ExpInt << '/' << ExpToLVLUPInt;
-		SetColor(15);
 		if (Player.Experience < 10) { std::cout << ' '; }
 		if (Player.Experience < 100) { std::cout << ' '; }
 		if (Player.Experience < 1000) { std::cout << ' '; }
@@ -2074,7 +2163,7 @@ public:
 	{
 		if (!BattleMode)
 		{
-			Enemy.GiveExperience = 10;
+			system(" cls ");
 			int ExpInt = Player.Experience;
 			int ExpToLvlUPInt = Player.ExpToLvlUP;
 			int GivExpInt = Enemy.GiveExperience;
@@ -2190,21 +2279,62 @@ public:
 		Spawn.RandSpawn('Z');
 	}
 
+	void Finish()
+	{
+		if (!Player.Alive)
+		{
+			std::cout << (char)201;
+			for (short int m = 0; m < 30; m++) { std::cout << (char)205; }
+			std::cout << (char)187 << '\n';
+			std::cout << (char)186 << "          GAME OVER           " << (char)186 << '\n';
+			std::cout << (char)200;
+			for (short int m = 0; m < 30; m++) { std::cout << (char)205; }
+			std::cout << (char)188;
+			char x;
+			std::cin >> x;
+		}
+	}
+
+	void NewStage()
+	{
+		Dungeon.Stage++;
+		Player.Spawned = false;
+		Dungeon.EntityMap[Player.Y][Player.X] = 0;
+		Start();
+	}
+
 	short int UpdateExploreMode()
 	{
-		if (ExploreMode)
+		if (ExploreMode && Player.Alive)
 		{
+			Spawn.SpawnKey();
 			system(" cls ");
 			Dungeon.PrintMap();
+
+			
 			Mov.Move();
-			Player.Food -= 0.5;
+			
+			if (Dungeon.Map[Player.Y][Player.X] == 3 && Player.Key) {  Player.Key = false; NewStage(); }
+
+			if (Player.Food > -5) { Player.Food -= 0.5; }
+
 			Battle.CheckForFight();
-			if (BattleMode)
-			{
-				return 1;
-			}
+			if (BattleMode) { return 1; }
+
 			GameAI();
 			Battle.CheckForFight();
+
+			double FoodDouble = Player.Food / Player.FoodMax;
+			double HPDouble = Player.HP / Player.HPMax;
+
+			if (FoodDouble > 0.7){
+				if (HPDouble < 1){ Player.HP++;	}
+				if (FoodDouble > 0.9){
+					if (HPDouble < 1){ Player.HP++;}
+			}}
+			if (FoodDouble < 0) { Player.HP -= 5; }
+			if (Player.HP < 0) { Player.Alive = false; Run = false; }
+
 			system(" cls ");
 			if (BattleMode)
 			{
@@ -2216,7 +2346,7 @@ public:
 
 	short int UpdateBattleMode()
 	{
-		if (BattleMode)
+		if (BattleMode && Player.Alive)
 		{
 			system(" cls ");
 			Battle.Update();
@@ -2233,10 +2363,12 @@ public:
 			UpdateExploreMode();
 			UpdateBattleMode();
 		}while (Run);
+		Finish();
 		return 0;
 
 		
 	}
+
 }; GameClass Game;
 
 
